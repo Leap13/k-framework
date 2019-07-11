@@ -20,7 +20,6 @@ if( ! class_exists( 'KFW_Field_switcher' ) ) {
       $text_on    = ( ! empty( $this->field['text_on'] ) ) ? $this->field['text_on'] : esc_html__( 'On', 'kfw' );
       $text_off   = ( ! empty( $this->field['text_off'] ) ) ? $this->field['text_off'] : esc_html__( 'Off', 'kfw' );
 
-      echo esc_html( $this->field_before() );
 
       echo '<div class="kfw--switcher'. esc_attr( $active ) .'">';
       echo '<span class="kfw--on">'. esc_html( $text_on ).'</span>';
@@ -32,8 +31,6 @@ if( ! class_exists( 'KFW_Field_switcher' ) ) {
       echo ( ! empty( $this->field['label'] ) ) ? '<span class="kfw--label">'. esc_html( $this->field['label'] ) . '</span>' : '';
 
       echo '<div class="clear"></div>';
-
-      echo esc_html( $this->field_after() );
 
     }
 

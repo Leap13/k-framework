@@ -157,15 +157,9 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
       $value = '';
 
       if( is_object( $post ) && ! empty( $field['id'] ) ) {
-
-        if( $this->args['data_type'] !== 'serialize' ) {
-          $meta  = get_post_meta( $post->ID, $field['id'] );
-          $value = ( isset( $meta[0] ) ) ? $meta[0] : null;
-        } else {
-          $meta  = get_post_meta( $post->ID, $this->unique, true );
-          $value = ( isset( $meta[$field['id']] ) ) ? $meta[$field['id']] : null;
-        }
-
+       
+        $meta    = get_post_meta( $post->ID, $this->unique, true );
+        $value   = ( isset( $meta[$field['id']] ) ) ? $meta[$field['id']] : null;
         $default = $this->get_default( $field );
         $value   = ( isset( $value ) ) ? $value : $default;
 
@@ -180,71 +174,29 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
       global $post;
 
-      $has_nav  = ( count( $this->sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
-      $show_all = ( ! $has_nav ) ? ' kfw-show-all' : '';
-      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_kfw_errors', true ) : array();
-      $errors   = ( ! empty( $errors ) ) ? $errors : array();
-      $theme    = ( $this->args['theme'] ) ? ' kfw-theme-'. $this->args['theme'] : '';
-      $class    = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
-
-      if( is_object ( $post ) && ! empty( $errors ) ) {
-        delete_post_meta( $post->ID, '_kfw_errors' );
-      }
-
       wp_nonce_field( 'kfw_metabox_nonce', 'kfw_metabox_nonce'. $this->unique );
 
-      echo '<div class="kfw kfw-metabox'. $theme . $class .'">';
+      echo '<div class="kfw kfw-metabox kfw-theme-light">';
 
-        echo '<div class="kfw-wrapper'. $show_all .'">';
-
-          if( $has_nav ) {
-
-            echo '<div class="kfw-nav kfw-nav-metabox" data-unique="'. $this->unique .'">';
-
-              echo '<ul>';
-              $tab_key = 1;
-              foreach( $this->sections as $section ) {
-
-                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="kfw-label-error kfw-error">!</i>' : '';
-                $tab_icon = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. $section['icon'] .'"></i>' : '';
-
-                echo '<li><a href="#" data-section="'. $this->unique .'_'. $tab_key .'">'. $tab_icon . $section['title'] . $tab_error .'</a></li>';
-
-                $tab_key++;
-              }
-              echo '</ul>';
-
-            echo '</div>';
-
-          }
+        echo '<div class="kfw-wrapper kfw-show-all">';
 
           echo '<div class="kfw-content">';
 
             echo '<div class="kfw-sections">';
 
-            $section_key = 1;
-
             foreach( $this->sections as $section ) {
 
-              $onload = ( ! $has_nav ) ? ' kfw-onload' : '';
+              echo '<div class="kfw-section kfw-onload">';
 
-              echo '<div id="kfw-section-'. $this->unique .'_'. $section_key .'" class="kfw-section'. $onload .'">';
+              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+              $section_title = ( ! empty( $section['title'] ) ) ? esc_attr( $section['title'] ) : '';
 
-              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. $section['icon'] .'"></i>' : '';
-              $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
-
-              echo ( $section_title || $section_icon ) ? '<div class="kfw-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
+              echo ( $section_title || $section_icon ) ? '<div class="kfw-section-title"><h3>'. ( $section_icon ) . ( $section_title ) .'</h3></div>' : '';
 
               if( ! empty( $section['fields'] ) ) {
 
                 foreach ( $section['fields'] as $field ) {
-
-                  if( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
-                    $field['_error'] = $errors['fields'][$field['id']];
-                  }
-
                   KFW::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
-
                 }
 
               } else {
@@ -255,28 +207,13 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
               echo '</div>';
 
-              $section_key++;
             }
 
             echo '</div>';
 
             echo '<div class="clear"></div>';
 
-            if( ! empty( $this->args['show_restore'] ) ) {
-
-              echo '<div class=" kfw-metabox-restore">';
-              echo '<label>';
-              echo '<input type="checkbox" name="'. $this->unique .'[_restore]" />';
-              echo '<span class="button kfw-button-restore">'. esc_html__( 'Restore', 'kfw' ) .'</span>';
-              echo '<span class="button kfw-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'kfw' ), esc_html__( 'Cancel', 'kfw' ) ) .'</span>';
-              echo '</label>';
-              echo '</div>';
-
-            }
-
           echo '</div>';
-
-          echo ( $has_nav ) ? '<div class="kfw-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 
@@ -299,101 +236,7 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
         return $post_id;
       }
 
-      $errors  = array();
-      $request = $_POST[$this->unique];
-
-      if( ! empty( $request ) ) {
-
-        // ignore _nonce
-        if( isset( $request['_nonce'] ) ) {
-          unset( $request['_nonce'] );
-        }
-
-        // sanitize and validate
-        $section_key = 1;
-        foreach( $this->sections as $section ) {
-
-          if( ! empty( $section['fields'] ) ) {
-
-            foreach( $section['fields'] as $field ) {
-
-              if( ! empty( $field['id'] ) ) {
-
-                // sanitize
-                if( ! empty( $field['sanitize'] ) ) {
-
-                  $sanitize              = $field['sanitize'];
-                  $value_sanitize        = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                  $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
-
-                }
-
-                // validate
-                if( ! empty( $field['validate'] ) ) {
-
-                  $validate       = $field['validate'];
-                  $value_validate = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                  $has_validated  = call_user_func( $validate, $value_validate );
-
-                  if( ! empty( $has_validated ) ) {
-
-                    $errors['sections'][$section_key] = true;
-                    $errors['fields'][$field['id']] = $has_validated;
-                    $request[$field['id']] = $this->get_meta_value( $field );
-
-                  }
-
-                }
-
-                // auto sanitize
-                if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                  $request[$field['id']] = '';
-                }
-
-              }
-
-            }
-
-          }
-
-          $section_key++;
-        }
-
-      }
-
-      $request = apply_filters( "kfw_{$this->unique}_save", $request, $post_id, $this );
-
-      do_action( "kfw_{$this->unique}_save_before", $request, $post_id, $this );
-
-      if( empty( $request ) || ! empty( $request['_restore'] ) ) {
-
-        if( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $request as $key => $value ) {
-            delete_post_meta( $post_id, $key );
-          }
-        } else {
-          delete_post_meta( $post_id, $this->unique );
-        }
-
-      } else {
-
-        if( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $request as $key => $value ) {
-            update_post_meta( $post_id, $key, $value );
-          }
-        } else {
-          update_post_meta( $post_id, $this->unique, $request );
-        }
-
-        if( ! empty( $errors ) ) {
-          update_post_meta( $post_id, '_kfw_errors', $errors );
-        }
-
-      }
-
-      do_action( "kfw_{$this->unique}_saved", $request, $post_id, $this );
-
-      do_action( "kfw_{$this->unique}_save_after", $request, $post_id, $this );
+      update_post_meta( $post_id, $this->unique, wp_unslash( (array) $_POST[$this->unique] ) );
 
     }
   }

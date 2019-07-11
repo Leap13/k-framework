@@ -2,7 +2,7 @@
  *
  * -----------------------------------------------------------
  *
- * Codestar Framework Gutenberg Block
+ * Framework Gutenberg Block
  * A Simple and Lightweight WordPress Option Framework
  *
  * -----------------------------------------------------------

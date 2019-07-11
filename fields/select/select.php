@@ -24,11 +24,10 @@ if( ! class_exists( '_Field_select' ) ) {
 
       $this->value = ( is_array( $this->value ) ) ? $this->value : array_filter( (array) $this->value );
 
-      echo esc_html( $this->field_before() );
 
       if( isset( $this->field['options'] ) ) {
 
-        $options = ( is_array( $this->field['options'] ) ) ? $this->field['options'] : $this->field_data( $this->field['options'] );
+       $options = ( is_array( $this->field['options'] ) ) ? $this->field['options'] : array();
 
         if( is_array( $options ) && ! empty( $options ) ) {
 
@@ -54,8 +53,6 @@ if( ! class_exists( '_Field_select' ) ) {
         }
 
       }
-
-      echo esc_html( $this->field_after() );
 
     }
 

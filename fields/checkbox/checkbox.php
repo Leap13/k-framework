@@ -16,15 +16,12 @@ if( ! class_exists( 'KFW_Field_checkbox' ) ) {
 
     public function render() {
 
-      echo esc_html( $this->field_before() );
-
       echo '<label class="kfw-checkbox">';
       echo '<input type="hidden" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'" class="kfw--input" />';
       echo '<input type="checkbox" class="kfw--checkbox"'. esc_html( checked( $this->value, 1, false ) ) .'/>';
       echo ( ! empty( $this->field['label'] ) ) ? ' '. esc_html( $this->field['label'] ) : '';
       echo '</label>';
 
-      echo esc_html( $this->field_after() );
 
     }
 

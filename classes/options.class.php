@@ -88,8 +88,8 @@ if( ! class_exists( 'KFW_Options' ) ) {
     public function __construct( $key, $params = array() ) {
 
       $this->unique   = $key;
-      $this->args     = apply_filters( "kfw_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections = apply_filters( "kfw_{$this->unique}_sections", $params['sections'], $this );
+      $this->args     = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections = apply_filters( "csf_{$this->unique}_sections", $params['sections'], $this );
 
       // run only is admin panel options, avoid performance loss
       $this->pre_tabs     = $this->pre_tabs( $this->sections );
@@ -102,13 +102,8 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
       add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
       add_action( 'admin_bar_menu', array( &$this, 'add_admin_bar_menu' ), $this->args['admin_bar_menu_priority'] );
-      add_action( 'wp_ajax_kfw_'. $this->unique .'_ajax_save', array( &$this, 'ajax_save' ) );
+      add_action( 'wp_ajax_csf_'. $this->unique .'_ajax_save', array( &$this, 'ajax_save' ) );
 
-      if( ! empty( $this->args['show_network_menu'] ) ) {
-        add_action( 'network_admin_menu', array( &$this, 'add_admin_menu' ) );
-      }
-
-      // wp enqeueu for typography and output css
       parent::__construct();
 
     }
@@ -186,33 +181,12 @@ if( ! class_exists( 'KFW_Options' ) ) {
         global $submenu;
 
         $menu_slug = $this->args['menu_slug'];
-        $menu_icon = ( ! empty( $this->args['admin_bar_menu_icon'] ) ) ? '<span class="kfw-ab-icon ab-icon '. $this->args['admin_bar_menu_icon'] .'"></span>' : '';
 
         $wp_admin_bar->add_node( array(
           'id'    => $menu_slug,
-          'title' => $menu_icon . $this->args['menu_title'],
+          'title' => $this->args['menu_title'],
           'href'  => ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu_slug ) : admin_url( 'admin.php?page='. $menu_slug ),
         ) );
-
-        if( ! empty( $submenu[$menu_slug] ) ) {
-          foreach( $submenu[$menu_slug] as $key => $menu ) {
-            $wp_admin_bar->add_node( array(
-              'parent' => $menu_slug,
-              'id'     => $menu_slug .'-'. $key,
-              'title'  => $menu[0],
-              'href'   => ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu[2] ) : admin_url( 'admin.php?page='. $menu[2] ),
-            ) );
-          }
-        }
-
-        if( ! empty( $this->args['show_network_menu'] ) ) {
-          $wp_admin_bar->add_node( array(
-            'parent' => 'network-admin',
-            'id'     => $menu_slug .'-network-admin',
-            'title'  => $menu_icon . $this->args['menu_title'],
-            'href'   => network_admin_url( 'admin.php?page='. $menu_slug ),
-          ) );
-        }
 
       }
 
@@ -224,9 +198,9 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
         $_POST = json_decode( stripslashes( $_POST['data'] ), true );
 
-        $nonce = 'kfw_options_nonce'. $this->unique;
+        $nonce = 'csf_options_nonce'. $this->unique;
 
-        if( isset( $_POST[$nonce] ) && wp_verify_nonce( $_POST[$nonce], 'kfw_options_nonce' ) ) {
+        if( isset( $_POST[$nonce] ) && wp_verify_nonce( $_POST[$nonce], 'csf_options_nonce' ) ) {
 
           $this->set_options();
 
@@ -236,7 +210,7 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
       }
 
-      wp_send_json_error( array( 'success' => false, 'error' => esc_html__( 'Error while saving.', 'kfw' ) ) );
+      wp_send_json_error( array( 'success' => false, 'error' => esc_html__( 'Error while saving.', 'csf' ) ) );
 
     }
 
@@ -271,23 +245,15 @@ if( ! class_exists( 'KFW_Options' ) ) {
     // set options
     public function set_options() {
 
-      $nonce = 'kfw_options_nonce'. $this->unique;
+      $nonce = 'csf_options_nonce'. $this->unique;
 
-      if( isset( $_POST[$nonce] ) && wp_verify_nonce( $_POST[$nonce], 'kfw_options_nonce' ) ) {
+      if( isset( $_POST[$nonce] ) && wp_verify_nonce( $_POST[$nonce], 'csf_options_nonce' ) ) {
 
-        $request    = ( ! empty( $_POST[$this->unique] ) ) ? $_POST[$this->unique] : array();
-        $transient  = ( ! empty( $_POST['kfw_transient'] ) ) ? $_POST['kfw_transient'] : array();
+        $request    = ( ! empty( $_POST[$this->unique] ) ) ? wp_unslash( (array) $_POST[$this->unique] ) : array();
+        $transient  = ( ! empty( $_POST['csf_transient'] ) ) ? wp_unslash( (array) $_POST['csf_transient'] ) : array();
         $section_id = ( ! empty( $transient['section'] ) ) ? $transient['section'] : '';
 
-        // import data
-        if( ! empty( $transient['kfw_import_data'] ) ) {
-
-          $import_data = json_decode( stripslashes( trim( $transient['kfw_import_data'] ) ), true );
-          $request = ( is_array( $import_data ) ) ? $import_data : array();
-
-          $this->notice = esc_html__( 'Success. Imported backup options.', 'kfw' );
-
-        } else if( ! empty( $transient['reset'] ) ) {
+        if( ! empty( $transient['reset'] ) ) {
 
           foreach( $this->pre_fields as $field ) {
             if( ! empty( $field['id'] ) ) {
@@ -295,7 +261,7 @@ if( ! class_exists( 'KFW_Options' ) ) {
             }
           }
 
-          $this->notice = esc_html__( 'Default options restored.', 'kfw' );
+          $this->notice = esc_html__( 'Default options restored.', 'csf' );
 
         } else if( ! empty( $transient['reset_section'] ) && ! empty( $section_id ) ) {
 
@@ -309,45 +275,7 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
           }
 
-          $this->notice = esc_html__( 'Default options restored for only this section.', 'kfw' );
-
-        } else {
-
-          // sanitize and validate
-          foreach( $this->pre_fields as $field ) {
-
-            if( ! empty( $field['id'] ) ) {
-
-              // sanitize
-              if( ! empty( $field['sanitize'] ) ) {
-
-                $sanitize = $field['sanitize'];
-                $value_sanitize = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
-
-              }
-
-              // validate
-              if( ! empty( $field['validate'] ) ) {
-
-                $value_validate = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                $has_validated  = call_user_func( $field['validate'], $value_validate );
-
-                if( ! empty( $has_validated ) ) {
-                  $request[$field['id']] = ( isset( $this->options[$field['id']] ) ) ? $this->options[$field['id']] : '';
-                  $this->errors[$field['id']] = $has_validated;
-                }
-
-              }
-
-              // auto sanitize
-              if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                $request[$field['id']] = '';
-              }
-
-            }
-
-          }
+          $this->notice = esc_html__( 'Default options restored for only this section.', 'csf' );
 
         }
 
@@ -356,18 +284,18 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
         $request = wp_unslash( $request );
 
-        $request = apply_filters( "kfw_{$this->unique}_save", $request, $this );
+        $request = apply_filters( "csf_{$this->unique}_save", $request, $this );
 
-        do_action( "kfw_{$this->unique}_save_before", $request, $this );
+        do_action( "csf_{$this->unique}_save_before", $request, $this );
 
         $this->options = $request;
 
         $this->save_options( $request );
 
-        do_action( "kfw_{$this->unique}_save_after", $request, $this );
+        do_action( "csf_{$this->unique}_save_after", $request, $this );
 
         if( empty( $this->notice ) ) {
-          $this->notice = esc_html__( 'Settings saved.', 'kfw' );
+          $this->notice = esc_html__( 'Settings saved.', 'csf' );
         }
 
       }
@@ -378,33 +306,13 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
     // save options database
     public function save_options( $request ) {
-
-      if( $this->args['database'] === 'transient' ) {
-        set_transient( $this->unique, $request, $this->args['transient_time'] );
-      } else if( $this->args['database'] === 'theme_mod' ) {
-        set_theme_mod( $this->unique, $request );
-      } else if( $this->args['database'] === 'network' ) {
-        update_site_option( $this->unique, $request );
-      } else {
-        update_option( $this->unique, $request );
-      }
-
-      do_action( "kfw_{$this->unique}_saved", $request, $this );
-
+      update_option( $this->unique, $request );
     }
 
     // get options from database
     public function get_options() {
 
-      if( $this->args['database'] === 'transient' ) {
-        $this->options = get_transient( $this->unique );
-      } else if( $this->args['database'] === 'theme_mod' ) {
-        $this->options = get_theme_mod( $this->unique );
-      } else if( $this->args['database'] === 'network' ) {
-        $this->options = get_site_option( $this->unique );
-      } else {
-        $this->options = get_option( $this->unique );
-      }
+      $this->options = get_option( $this->unique );
 
       if( empty( $this->options ) ) {
         $this->options = array();
@@ -473,13 +381,6 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
       }
 
-   //   add_filter( 'admin_footer_text', array( &$this, 'add_admin_footer_text' ) );
-
-    }
-
-    public function add_admin_footer_text() {
-      $default = 'Thank you for creating with Kemet Framework</a>';
-      echo ( ! empty( $this->args['footer_credit'] ) ) ? $this->args['footer_credit'] : $default;
     }
 
     public function error_check( $sections, $err = '' ) {
@@ -490,7 +391,7 @@ if( ! class_exists( 'KFW_Options' ) ) {
           foreach( $sections['fields'] as $field ) {
             if( ! empty( $field['id'] ) ) {
               if( array_key_exists( $field['id'], $this->errors ) ) {
-                $err = '<span class="kfw-label-error">!</span>';
+                $err = '<span class="csf-label-error">!</span>';
               }
             }
           }
@@ -514,55 +415,33 @@ if( ! class_exists( 'KFW_Options' ) ) {
     // option page html output
     public function add_options_html() {
 
-      $has_nav       = ( count( $this->pre_tabs ) > 1 ) ? true : false;
-      $show_all      = ( ! $has_nav ) ? ' kfw-show-all' : '';
-      $ajax_class    = ( $this->args['ajax_save'] ) ? ' kfw-save-ajax' : '';
-      $sticky_class  = ( $this->args['sticky_header'] ) ? ' kfw-sticky-header' : '';
-      $wrapper_class = ( $this->args['framework_class'] ) ? ' '. $this->args['framework_class'] : '';
-      $theme         = ( $this->args['theme'] ) ? ' kfw-theme-'. $this->args['theme'] : '';
-      $class         = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
+      echo '<div class="csf csf-options csf-theme-dark" data-slug="'. esc_attr( $this->args['menu_slug'] ) .'" data-unique="'. esc_attr( $this->unique ) .'">';
 
-      echo '<div class="kfw kfw-options'. $theme . $class . $wrapper_class .'" data-slug="'. $this->args['menu_slug'] .'" data-unique="'. $this->unique .'">';
-
-        $notice_class = ( ! empty( $this->notice ) ) ? ' kfw-form-show' : '';
+        $notice_class = ( ! empty( $this->notice ) ) ? ' csf-form-show' : '';
         $notice_text  = ( ! empty( $this->notice ) ) ? $this->notice : '';
 
-        echo '<div class="kfw-form-result kfw-form-success'. $notice_class .'">'. $notice_text .'</div>';
+        echo '<div class="csf-form-result csf-form-success'. esc_attr( $notice_class ) .'">'. esc_attr( $notice_text ) .'</div>';
 
-        $error_class = ( ! empty( $this->errors ) ) ? ' kfw-form-show' : '';
+        echo '<div class="csf-container">';
 
-        echo '<div class="kfw-form-result kfw-form-error'. $error_class .'">';
-        if( ! empty( $this->errors ) ) {
-            foreach ( $this->errors as $error ) {
-              echo '<i class="kfw-label-error">!</i> '. $error .'<br />';
-            }
-        }
-        echo '</div>';
+        echo '<form method="post" action="" enctype="multipart/form-data" id="csf-form" autocomplete="off">';
 
-        echo '<div class="kfw-container">';
+        echo '<input type="hidden" class="csf-section-id" name="csf_transient[section]" value="1">';
+        wp_nonce_field( 'csf_options_nonce', 'csf_options_nonce'. $this->unique );
 
-        echo '<form method="post" action="" enctype="multipart/form-data" id="kfw-form" autocomplete="off">';
+        echo '<div class="csf-header">';
+        echo '<div class="csf-header-inner">';
 
-        echo '<input type="hidden" class="kfw-section-id" name="kfw_transient[section]" value="1">';
-        wp_nonce_field( 'kfw_options_nonce', 'kfw_options_nonce'. $this->unique );
-
-        echo '<div class="kfw-header'. esc_attr( $sticky_class ) .'">';
-        echo '<div class="kfw-header-inner">';
-
-          echo '<div class="kfw-header-left">';
-          echo '<h1>'. $this->args['framework_title'] .'</h1>';
+          echo '<div class="csf-header-left">';
+          echo '<h1>Kemet Panel <small>by Leap13</small></h1>';
           echo '</div>';
 
-          echo '<div class="kfw-header-right">';
+          echo '<div class="csf-header-right">';
 
-            echo ( $has_nav && $this->args['show_all_options'] ) ? '<div class="kfw-expand-all" title="'. esc_html__( 'show all options', 'kfw' ) .'"><i class="fa fa-outdent"></i></div>' : '';
-
-            echo ( $this->args['show_search'] ) ? '<div class="kfw-search"><input type="text" name="kfw-search" placeholder="'. esc_html__( 'Search option(s)', 'kfw' ) .'" autocomplete="off" /></div>' : '';
-
-            echo '<div class="kfw-buttons">';
-            echo '<input type="submit" name="'. $this->unique .'[_nonce][save]" class="button button-primary kfw-save'. $ajax_class .'" value="'. esc_html__( 'Save', 'kfw' ) .'" data-save="'. esc_html__( 'Saving...', 'kfw' ) .'">';
-            echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="kfw_transient[reset_section]" class="button button-secondary kfw-reset-section kfw-confirm" value="'. esc_html__( 'Reset Section', 'kfw' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'kfw' ) .'">' : '';
-            echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="kfw_transient[reset]" class="button button-secondary kfw-warning-primary kfw-reset-all kfw-confirm" value="'. esc_html__( 'Reset All', 'kfw' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'kfw' ) .'">' : '';
+            echo '<div class="csf-buttons">';
+            echo '<input type="submit" name="'. esc_attr( $this->unique ) .'[_nonce][save]" class="button button-primary csf-save csf-save-ajax" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
+            echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="csf_transient[reset_section]" class="button button-secondary csf-reset-section csf-confirm" value="'. esc_html__( 'Reset Section', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'csf' ) .'">' : '';
+            echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="csf_transient[reset]" class="button button-secondary csf-warning-primary csf-reset-all csf-confirm" value="'. esc_html__( 'Reset All', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'csf' ) .'">' : '';
             echo '</div>';
 
           echo '</div>';
@@ -571,81 +450,20 @@ if( ! class_exists( 'KFW_Options' ) ) {
           echo '</div>';
         echo '</div>';
 
-        echo '<div class="kfw-wrapper'. $show_all .'">';
+        echo '<div class="csf-wrapper csf-show-all">';
 
-          if( $has_nav ) {
-            echo '<div class="kfw-nav kfw-nav-options">';
+          echo '<div class="csf-content">';
 
-              echo '<ul>';
+            echo '<div class="csf-sections">';
 
-              $tab_key = 1;
-
-              foreach( $this->pre_tabs as $tab ) {
-
-                $tab_error = $this->error_check( $tab );
-                $tab_icon  = ( ! empty( $tab['icon'] ) ) ? '<i class="'. $tab['icon'] .'"></i>' : '';
-
-                if( ! empty( $tab['subs'] ) ) {
-
-                  echo '<li class="kfw-tab-depth-0">';
-
-                    echo '<a href="#tab='. $tab_key .'" class="kfw-arrow">'. $tab_icon . $tab['title'] . $tab_error .'</a>';
-
-                    echo '<ul>';
-
-                    foreach ( $tab['subs'] as $sub ) {
-
-                      $sub_error = $this->error_check( $sub );
-                      $sub_icon  = ( ! empty( $sub['icon'] ) ) ? '<i class="'. $sub['icon'] .'"></i>' : '';
-
-                      echo '<li class="kfw-tab-depth-1"><a id="kfw-tab-link-'. $tab_key .'" href="#tab='. $tab_key .'">'. $sub_icon . $sub['title'] . $sub_error .'</a></li>';
-
-                      $tab_key++;
-                    }
-
-                    echo '</ul>';
-
-                  echo '</li>';
-
-                } else {
-
-                  echo '<li class="kfw-tab-depth-0"><a id="kfw-tab-link-'. $tab_key .'" href="#tab='. $tab_key .'">'. $tab_icon . $tab['title'] . $tab_error .'</a></li>';
-
-                  $tab_key++;
-                }
-
-              }
-
-              echo '</ul>';
-
-            echo '</div>';
-
-          }
-
-          echo '<div class="kfw-content">';
-
-            echo '<div class="kfw-sections">';
-
-            $section_key = 1;
 
             foreach( $this->pre_sections as $section ) {
 
-              $onload = ( ! $has_nav ) ? ' kfw-onload' : '';
-              $section_icon = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. $section['icon'] .'"></i>' : '';
-
-              echo '<div id="kfw-section-'. $section_key .'" class="kfw-section'. $onload .'">';
-              echo ( $has_nav ) ? '<div class="kfw-section-title"><h3>'. $section_icon . $section['title'] .'</h3></div>' : '';
-              echo ( ! empty( $section['description'] ) ) ? '<div class="kfw-field kfw-section-description">'. $section['description'] .'</div>' : '';
+              echo '<div class="csf-section csf-onload">';
 
               if( ! empty( $section['fields'] ) ) {
 
                 foreach( $section['fields'] as $field ) {
-
-                  $is_field_error = $this->error_check( $field );
-
-                  if( ! empty( $is_field_error ) ) {
-                    $field['_error'] = $is_field_error;
-                  }
 
                   $value = ( ! empty( $field['id'] ) && isset( $this->options[$field['id']] ) ) ? $this->options[$field['id']] : '';
 
@@ -655,13 +473,12 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
               } else {
 
-                echo '<div class="kfw-no-option kfw-text-muted">'. esc_html__( 'No option provided by developer.', 'kfw' ) .'</div>';
+                echo '<div class="csf-no-option csf-text-muted">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
 
               }
 
               echo '</div>';
 
-              $section_key++;
             }
 
             echo '</div>';
@@ -670,21 +487,19 @@ if( ! class_exists( 'KFW_Options' ) ) {
 
           echo '</div>';
 
-          echo '<div class="kfw-nav-background"></div>';
+          echo '<div class="csf-nav-background"></div>';
 
         echo '</div>';
 
         if( ! empty( $this->args['show_footer'] ) ) {
 
-          echo '<div class="kfw-footer">';
+          echo '<div class="csf-footer">';
 
-          echo '<div class="kfw-buttons">';
-          echo '<input type="submit" name="kfw_transient[save]" class="button button-primary kfw-save'. $ajax_class .'" value="'. esc_html__( 'Save', 'kfw' ) .'" data-save="'. esc_html__( 'Saving...', 'kfw' ) .'">';
-          echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="kfw_transient[reset_section]" class="button button-secondary kfw-reset-section kfw-confirm" value="'. esc_html__( 'Reset Section', 'kfw' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'kfw' ) .'">' : '';
-          echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="kfw_transient[reset]" class="button button-secondary kfw-warning-primary kfw-reset-all kfw-confirm" value="'. esc_html__( 'Reset All', 'kfw' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'kfw' ) .'">' : '';
+          echo '<div class="csf-buttons">';
+          echo '<input type="submit" name="csf_transient[save]" class="button button-primary csf-save csf-save-ajax" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
+          echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="csf_transient[reset_section]" class="button button-secondary csf-reset-section csf-confirm" value="'. esc_html__( 'Reset Section', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'csf' ) .'">' : '';
+          echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="csf_transient[reset]" class="button button-secondary csf-warning-primary csf-reset-all csf-confirm" value="'. esc_html__( 'Reset All', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'csf' ) .'">' : '';
           echo '</div>';
-
-          echo ( ! empty( $this->args['footer_text'] ) ) ? '<div class="kfw-copyright">'. $this->args['footer_text'] .'</div>' : '';
 
           echo '<div class="clear"></div>';
           echo '</div>';
@@ -696,8 +511,6 @@ if( ! class_exists( 'KFW_Options' ) ) {
         echo '</div>';
 
         echo '<div class="clear"></div>';
-
-        echo ( ! empty( $this->args['footer_after'] ) ) ? $this->args['footer_after'] : '';
 
       echo '</div>';
 

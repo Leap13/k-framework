@@ -1351,7 +1351,7 @@
 * http://miohtama.github.com/jquery-interdependencies/
 * Copyright 2012-2013 Mikko Ohtamaa, others
 *
-* Modifyed by Codestar
+* Modifyed by Framework
 *
 */
 (function($) {
@@ -1628,7 +1628,7 @@
 }(this, function(exports, $) {
 
   //
-  // Codestar: Added custom patterns for spesific validate
+  // Added custom patterns for spesific validate
   //
   var patterns = {
     validate: /^(?!_nonce)[a-zA-Z0-9_-]*(?:\[(?:\d*|(?!_nonce)[a-zA-Z0-9_-]+)\])*$/i,
@@ -1730,7 +1730,7 @@
   };
 
   //
-  // Codestar: Renamed function names for avoid conflicts
+  // Renamed function names for avoid conflicts
   //
 
   if (typeof $.fn !== "undefined") {

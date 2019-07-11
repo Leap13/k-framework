@@ -2,7 +2,7 @@
  *
  * -----------------------------------------------------------
  *
- * Codestar Framework
+ * K Framework
  * A Simple and Lightweight WordPress Option Framework
  *
  * -----------------------------------------------------------
