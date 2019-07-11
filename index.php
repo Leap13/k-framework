@@ -1,6 +1,1 @@
-<?php
-/**
- * Silence is golden
- *
- * @package  Kemet Addons
- */
+<?php // Silence is golden.
