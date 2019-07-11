@@ -1,0 +1,517 @@
+/**
+ *
+ * ---------------------------------------------------------
+ * KEMET FRAMEWORK RTL CSS MAP
+ * ---------------------------------------------------------
+ *
+ * 01. Base
+ *     01. 01. Header
+ *     01. 02. Header Buttons
+ *     01. 03. Navigation
+ *     01. 04. Content
+ *     01. 05. Section
+ *     01. 06. Show All Options
+ *     01. 07. Search Input
+ *     01. 08. Copyright
+ *     01. 09. Metabox
+ * 02. Fields
+ *     02. 01. Field: typography
+ *     02. 02. Field: checkbox, radio
+ *     02. 03. Field: switcher
+ *     02. 04. Field: upload
+ *     02. 05. Field: group
+ *     02. 06. Field: repeater
+ *     02. 07. Field: help
+ *     02. 08. Field: icon
+ *     02. 09. Field: gallery
+ *     02. 10. Field: sorter
+ *     02. 11. Field: tabbed
+ *     02. 12. Field: media
+ *     02. 13. Field: notice
+ *     02. 14. Field: border, spacing, dimensions
+ *     02. 15. Field: background
+ *     02. 16. Field: spinner
+ *     02. 17. Field: slider
+ *     02. 18. Field: button_set
+ *     02. 19. Field: link_color
+ *     02. 20. Field: color_group
+ *     02. 21. Field: palette
+ * 03. Taxonomy
+ * 04. Profile
+ * 05. Modal
+ * 06. Customizer
+ * 07. Responsive
+ * 08. Others
+ *
+ * ---------------------------------------------------------
+ *
+ */
+/**
+ * 01. Base
+ */
+.kfw {
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+/**
+ * 01. 01. Header
+ */
+.kfw-header h1 {
+  float: right;
+}
+.kfw-header fieldset {
+  float: left;
+}
+
+/**
+ * 01. 02. Header Buttons
+ */
+.kfw-buttons {
+  float: left;
+  direction: ltr;
+}
+
+.kfw-header-left {
+  float: right;
+}
+
+.kfw-header-right {
+  float: left;
+}
+
+/**
+ * 01. 03. Navigation
+ */
+.kfw-nav {
+  float: right;
+}
+.kfw-nav ul {
+  clear: right;
+}
+.kfw-nav ul li .kfw-section-active:after {
+  right: auto;
+  left: 0;
+  border-left-color: #fff;
+  border-right-color: transparent;
+}
+.kfw-nav ul li .kfw-arrow:after {
+  content: "\f053";
+  right: auto;
+  left: 10px;
+}
+.kfw-nav ul li.kfw-tab-active .kfw-arrow:after {
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.kfw-nav ul ul li a {
+  padding-right: 25px;
+  padding-left: 15px;
+}
+.kfw-nav ul ul:before {
+  left: auto;
+  right: 15px;
+}
+.kfw-nav .fa {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+.kfw-nav-background {
+  left: auto;
+  right: 0;
+}
+
+/**
+ * 01. 04. Content
+ */
+.kfw-content {
+  margin-left: 0;
+  margin-right: 225px;
+}
+
+/**
+ * 01. 05. Section
+ */
+.kfw-sections {
+  float: right;
+}
+
+/**
+ * 01. 06. Show all options
+ */
+.kfw-show-all .kfw-content {
+  margin-right: 0;
+  overflow: hidden;
+}
+
+.kfw-expand-all {
+  float: right;
+  right: auto;
+  left: 40px;
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+/**
+ * 01. 07. Search Input
+ */
+.kfw-search {
+  float: right;
+}
+.kfw-search input {
+  margin: 0 0 0 5px;
+}
+
+/**
+ * 01. 08. Copyright
+ */
+.kfw-copyright {
+  float: right;
+}
+
+/**
+ * 01. 09. Metabox
+ */
+.kfw-metabox {
+  margin: -6px -12px -12px -12px;
+}
+.kfw-metabox .kfw-section-title {
+  padding: 20px;
+}
+.kfw-metabox .kfw-section-title .fa {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+.kfw-section-title .fa {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+/**
+ * 02. Fields
+ */
+.kfw-field .kfw-title {
+  float: right;
+}
+.kfw-field .kfw-fieldset {
+  margin-left: 0;
+  margin-right: 30%;
+}
+
+.kfw-pseudo-field {
+  padding: 0 0 0 5px !important;
+}
+
+/**
+ * 02. 01. Field: typography
+ */
+.kfw-field-typography select {
+  margin: 0;
+  width: 100%;
+}
+.kfw-field-typography .kfw--blocks-inputs .kfw--blocks {
+  flex-direction: row-reverse;
+}
+
+/**
+ * 02. 02. Field: checkbox, radio
+ */
+.kfw-field-checkbox .kfw--inline-list li,
+.kfw-field-radio .kfw--inline-list li {
+  margin-right: 0;
+  margin-left: 15px;
+}
+
+/**
+ * 02. 03. Field: switcher
+ */
+.kfw-field-switcher .kfw--switcher {
+  float: right;
+}
+.kfw-field-switcher .kfw--label {
+  float: right;
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+/**
+ * 02. 04. Field: upload
+ */
+.kfw-field-upload .kfw--remove,
+.kfw-field-upload .kfw--buttons {
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+/**
+ * 02. 05. Field: group
+ */
+.kfw-field-group .kfw-cloneable-title {
+  padding: 15px 10px 15px 65px;
+}
+.kfw-field-group .kfw-cloneable-helper {
+  right: auto;
+  left: 10px;
+}
+
+/**
+ * 02. 06. Field: repeater
+ */
+.kfw-field-repeater .kfw-repeater-helper {
+  border-left: 0;
+  border-right: 1px solid #eee;
+}
+
+/**
+ * 02. 07. Field: help
+ */
+.kfw-help {
+  right: auto;
+  left: 5px;
+}
+
+/**
+ * 02. 08. Field: icon
+ */
+.kfw-field-icon .button {
+  margin-right: 0;
+  margin-left: 5px;
+}
+.kfw-field-icon .kfw-icon-preview i {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 02. 09. Field: gallery
+ */
+.kfw-field-gallery ul li {
+  margin-right: 0;
+  margin-left: 5px;
+}
+.kfw-field-gallery .button {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 02. 11. Field: tabbed
+ */
+.kfw-field-tabbed .kfw-tabbed-nav .fa {
+  padding-right: 0;
+  padding-left: 5px;
+}
+.kfw-field-tabbed .kfw-tabbed-nav a {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 02. 12. Field: media
+ */
+.kfw-field-media .button {
+  margin-left: 0;
+  margin-right: 7px;
+}
+.kfw-field-media .hidden + .button {
+  margin-right: 0;
+}
+
+/**
+ * 02. 13. Field: notice
+ */
+.kfw-notice {
+  border-left: none;
+  border-right-style: solid;
+  border-right-width: 4px;
+}
+
+/**
+ * 02. 14. Field: border, spacing, dimensions
+ */
+.kfw-field-dimensions .kfw--input,
+.kfw-field-spacing .kfw--input,
+.kfw-field-border .kfw--input {
+  float: right;
+  margin-right: 0;
+  margin-left: 15px;
+}
+.kfw-field-dimensions .kfw--left,
+.kfw-field-spacing .kfw--left,
+.kfw-field-border .kfw--left {
+  float: right;
+}
+
+/**
+ * 02. 15. Field: background
+ */
+.kfw-field-background .kfw--block {
+  float: right;
+}
+.kfw-field-background .kfw--select,
+.kfw-field-background .kfw--media {
+  padding-right: 0;
+}
+.kfw-field-background .kfw--title {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 02. 16. Field: spinner
+ */
+.kfw-field-spinner .kfw--spin {
+  float: right;
+}
+
+/**
+ * 02. 17. Field: slider
+ */
+.kfw-field-slider .ui-slider {
+  direction: ltr;
+}
+.kfw-field-slider input[type="text"] {
+  margin-left: 0;
+  margin-right: 15px;
+}
+.kfw-field-slider em {
+  padding-left: 0;
+  padding-right: 5px;
+}
+
+/**
+ * 02. 18. Field: button_set
+ */
+.kfw-field-button_set .kfw--button-group {
+  float: right;
+}
+
+/**
+ * 02. 19. Field: link_color
+ */
+.kfw-field-link_color .kfw--left {
+  float: right;
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+/**
+ * 02. 20. Field: color_group
+ */
+.kfw-field-color_group .kfw--left {
+  float: right;
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+/**
+ * 02. 21. Field: palette
+ */
+.kfw-field-palette .kfw--palette {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+/**
+ * 03. Taxonomy
+ */
+.kfw-taxonomy-add-fields .kfw-fieldset {
+  margin-right: 0;
+}
+.kfw-taxonomy-add-fields .kfw-field > .kfw-fieldset > .kfw-help {
+  left: -5px;
+  right: auto;
+}
+
+.kfw-taxonomy-edit-fields .kfw-fieldset {
+  margin-left: 0;
+  margin-right: 225px;
+}
+.kfw-taxonomy-edit-fields .kfw-field > .kfw-fieldset > .kfw-help {
+  right: auto;
+  left: -5px;
+}
+
+/**
+ * 04. Profile
+ */
+.kfw-profile > h2 > .fa {
+  padding-right: 0;
+  padding-left: 7px;
+}
+.kfw-profile > .kfw-field > .kfw-fieldset {
+  margin-left: 0;
+  margin-right: 220px;
+}
+.kfw-profile > .kfw-field > .kfw-help {
+  left: 0;
+  right: auto;
+}
+
+.kfw-taxonomy-edit-fields .kfw-fieldset {
+  margin-left: 0;
+  margin-right: 225px;
+}
+.kfw-taxonomy-edit-fields .kfw-field > .kfw-fieldset > .kfw-help {
+  right: auto;
+  left: -5px;
+}
+
+/**
+ * 05. Modal
+ */
+.kfw-modal-content .kfw-field {
+  padding: 15px 15px 15px 30px;
+}
+
+.kfw-modal-title {
+  padding: 0 16px 0 36px;
+}
+
+.kfw-modal-close {
+  right: auto;
+  left: 0;
+}
+
+/**
+ * 06. Customizer
+ */
+.control-section .kfw-field .kfw-fieldset {
+  margin-right: 0;
+}
+
+/**
+ * 07. Responsive
+ */
+@media only screen and (max-width: 1200px) {
+  .kfw-metabox .kfw-field .kfw-fieldset {
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 782px) {
+  .kfw .kfw-fieldset,
+  .kfw .kfw-content {
+    margin-right: 0;
+  }
+}
+/**
+ * 08. Others
+ */
+.kfw-field .kfw--transparent-slider {
+  margin-left: 0;
+  margin-right: 2px;
+}
+.kfw-field .kfw--transparent-slider .ui-slider-handle {
+  margin: 0 -11px;
+}
+.kfw-field .kfw--transparent-offset {
+  background-position: center right;
+}
+.kfw-field .kfw--transparent-text {
+  right: auto;
+  left: 10px;
+}
