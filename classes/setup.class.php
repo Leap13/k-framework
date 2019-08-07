@@ -67,7 +67,20 @@ if( ! class_exists( 'KFW' ) ) {
           }
         }
       }
-
+      
+    // setup customize options
+      $params = array();
+      if ( ! empty( self::$args['customize_options'] ) ) {
+        foreach( self::$args['customize_options'] as $key => $value ) {
+          if( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+            $params['args']     = $value;
+            $params['sections'] = self::$args['sections'][$key];
+            self::$inited[$key] = true;
+            KFW_Customize_Options::instance( $key, $params );
+          }
+        }
+      }
+      
       // setup metaboxes
       $params = array();
       if ( ! empty( self::$args['metaboxes'] ) ) {
@@ -91,6 +104,11 @@ if( ! class_exists( 'KFW' ) ) {
     // create options
     public static function createOptions( $id, $args = array() ) {
       self::$args['options'][$id] = $args;
+    }
+    
+    // create customize options
+    public static function createCustomizeOptions( $id, $args = array() ) {
+      self::$args['customize_options'][$id] = $args;
     }
 
     // create metabox options
@@ -184,6 +202,7 @@ if( ! class_exists( 'KFW' ) ) {
       // includes premium version classes
       if( self::$premium ) {
         self::include_plugin_file( 'classes/metabox.class.php' );
+        self::include_plugin_file( 'classes/customize-options.class.php' );
       }
 
     }
