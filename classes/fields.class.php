@@ -9,7 +9,6 @@
  */
 if( ! class_exists( 'KFW_Fields' ) ) {
   abstract class KFW_Fields extends KFW_Abstract {
-
     public function __construct( $field = array(), $value = '', $unique = '', $where = '', $parent = '' ) {
       $this->field  = $field;
       $this->value  = $value;
@@ -17,7 +16,6 @@ if( ! class_exists( 'KFW_Fields' ) ) {
       $this->where  = $where;
       $this->parent = $parent;
     }
-
     public function field_name( $nested_name = '' ) {
 
       $field_id   = ( ! empty( $this->field['id'] ) ) ? $this->field['id'] : '';
@@ -30,6 +28,51 @@ if( ! class_exists( 'KFW_Fields' ) ) {
       }
 
       return $field_name . $nested_name;
+
+    }
+        public function field_attributes( $custom_atts = array() ) {
+
+      $field_id   = ( ! empty( $this->field['id'] ) ) ? $this->field['id'] : '';
+      $attributes = ( ! empty( $this->field['attributes'] ) ) ? $this->field['attributes'] : array();
+
+      if( ! empty( $field_id ) ) {
+        $attributes['data-depend-id'] = $field_id;
+      }
+
+      if( ! empty( $this->field['placeholder'] ) ) {
+        $attributes['placeholder'] = $this->field['placeholder'];
+      }
+
+      $attributes = wp_parse_args( $attributes, $custom_atts );
+
+      $atts = '';
+
+      if( ! empty( $attributes ) ) {
+        foreach ( $attributes as $key => $value ) {
+          if( $value === 'only-key' ) {
+            $atts .= ' '. $key;
+          } else {
+            $atts .= ' '. $key . '="'. $value .'"';
+          }
+        }
+      }
+
+      return $atts;
+
+    }
+
+    public function field_before() {
+      return ( ! empty( $this->field['before'] ) ) ? $this->field['before'] : '';
+    }
+
+    public function field_after() {
+
+      $output  = ( ! empty( $this->field['after'] ) ) ? $this->field['after'] : '';
+      $output .= ( ! empty( $this->field['desc'] ) ) ? '<p class="kfw-text-desc">'. $this->field['desc'] .'</p>' : '';
+      $output .= ( ! empty( $this->field['help'] ) ) ? '<span class="kfw-help"><span class="kfw-help-text">'. $this->field['help'] .'</span><span class="fa fa-question-circle"></span></span>' : '';
+      $output .= ( ! empty( $this->field['_error'] ) ) ? '<p class="kfw-text-error">'. $this->field['_error'] .'</p>' : '';
+
+      return $output;
 
     }
 

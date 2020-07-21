@@ -43,13 +43,14 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
       $this->post_type      = ( is_array( $this->args['post_type'] ) ) ? $this->args['post_type'] : array_filter( (array) $this->args['post_type'] );
       $this->post_formats   = ( is_array( $this->args['post_formats'] ) ) ? $this->args['post_formats'] : array_filter( (array) $this->args['post_formats'] );
       $this->page_templates = ( is_array( $this->args['page_templates'] ) ) ? $this->args['page_templates'] : array_filter( (array) $this->args['page_templates'] );
-      $this->pre_fields     = $this->pre_fields( $this->sections );
+      $meta_sections = wp_list_sort( $this->sections , 'priority_num' );
+      $this->pre_fields     = $this->pre_fields( $meta_sections );
 
       add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
       add_action( 'save_post', array( &$this, 'save_meta_box' ) );
       add_action( 'edit_attachment', array( &$this, 'save_meta_box' ) );
 
-      if( ! empty( $this->page_templates ) || ! empty( $this->post_formats ) ) {
+      if( ! empty( $this->page_templates ) || ! empty( $this->post_formats ) || ! empty( $this->args['class'] ) ) {
         foreach( $this->post_type as $post_type ) {
           add_filter( 'postbox_classes_'. $post_type .'_'. $this->unique, array( &$this, 'add_metabox_classes' ) );
         }
@@ -126,6 +127,10 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
       }
 
+      if( ! empty( $this->args['class'] ) ) {
+        $classes[] = $this->args['class'];
+      }
+
       return $classes;
 
     }
@@ -142,7 +147,7 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
     // get default value
     public function get_default( $field ) {
 
-      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : '';
+      $default = ( isset( $field['id'] ) && isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
       $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
 
       return $default;
@@ -154,16 +159,22 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
       global $post;
 
-      $value = '';
+      $value = null;
 
       if( is_object( $post ) && ! empty( $field['id'] ) ) {
-       
-        $meta    = get_post_meta( $post->ID, $this->unique, true );
-        $value   = ( isset( $meta[$field['id']] ) ) ? $meta[$field['id']] : null;
-        $default = $this->get_default( $field );
-        $value   = ( isset( $value ) ) ? $value : $default;
+
+        if( $this->args['data_type'] !== 'serialize' ) {
+          $meta  = get_post_meta( $post->ID, $field['id'] );
+          $value = ( isset( $meta[0] ) ) ? $meta[0] : null;
+        } else {
+          $meta  = get_post_meta( $post->ID, $this->unique, true );
+          $value = ( isset( $meta[$field['id']] ) ) ? $meta[$field['id']] : null;
+        }
 
       }
+
+      $default = $this->get_default( $field );
+      $value   = ( isset( $value ) ) ? $value : $default;
 
       return $value;
 
@@ -174,29 +185,72 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
       global $post;
 
+      $meta_sections = wp_list_sort( $this->sections , 'priority_num' );
+      $has_nav  = ( count( $meta_sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
+      $show_all = ( ! $has_nav ) ? ' kfw-show-all' : '';
+      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_kfw_errors', true ) : array();
+      $errors   = ( ! empty( $errors ) ) ? $errors : array();
+      $theme    = ( $this->args['theme'] ) ? ' kfw-theme-'. $this->args['theme'] : '';
+
+      if( is_object ( $post ) && ! empty( $errors ) ) {
+        delete_post_meta( $post->ID, '_kfw_errors' );
+      }
+
       wp_nonce_field( 'kfw_metabox_nonce', 'kfw_metabox_nonce'. $this->unique );
 
-      echo '<div class="kfw kfw-metabox kfw-theme-light">';
+      echo '<div class="kfw kfw-metabox'. $theme .'">';
 
-        echo '<div class="kfw-wrapper kfw-show-all">';
+        echo '<div class="kfw-wrapper'. $show_all .'">';
+
+          if( $has_nav ) {
+
+            echo '<div class="kfw-nav kfw-nav-metabox" data-unique="'. $this->unique .'">';
+
+              echo '<ul>';
+              $tab_key = 1;
+              $meta_sections = wp_list_sort( $this->sections , 'priority_num' );
+              foreach( $meta_sections as $section ) {
+
+                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="kfw-label-error kfw-error">!</i>' : '';
+                $tab_icon = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. $section['icon'] .'"></i>' : '';
+
+                echo '<li><a href="#" data-section="'. $this->unique .'_'. $tab_key .'">'. $tab_icon . $section['title'] . $tab_error .'</a></li>';
+
+                $tab_key++;
+              }
+              echo '</ul>';
+
+            echo '</div>';
+
+          }
 
           echo '<div class="kfw-content">';
 
             echo '<div class="kfw-sections">';
 
-            foreach( $this->sections as $section ) {
+            $section_key = 1;
+            $meta_sections = wp_list_sort( $this->sections , 'priority_num' );
+            foreach( $meta_sections as $section ) {
 
-              echo '<div class="kfw-section kfw-onload">';
+              $onload = ( ! $has_nav ) ? ' kfw-onload' : '';
 
-              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
-              $section_title = ( ! empty( $section['title'] ) ) ? esc_attr( $section['title'] ) : '';
+              echo '<div id="kfw-section-'. $this->unique .'_'. $section_key .'" class="kfw-section'. $onload .'">';
 
-              echo ( $section_title || $section_icon ) ? '<div class="kfw-section-title"><h3>'. ( $section_icon ) . ( $section_title ) .'</h3></div>' : '';
+              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="kfw-icon '. $section['icon'] .'"></i>' : '';
+              $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+
+              echo ( $section_title || $section_icon ) ? '<div class="kfw-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
 
               if( ! empty( $section['fields'] ) ) {
 
                 foreach ( $section['fields'] as $field ) {
-                  KFW::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
+
+                  if( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
+                    $field['_error'] = $errors['fields'][$field['id']];
+                  }
+
+                  kfw::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
+
                 }
 
               } else {
@@ -207,13 +261,28 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
 
               echo '</div>';
 
+              $section_key++;
             }
 
             echo '</div>';
 
             echo '<div class="clear"></div>';
 
+            if( ! empty( $this->args['show_restore'] ) ) {
+
+              echo '<div class="kfw-restore-wrapper">';
+              echo '<label>';
+              echo '<input type="checkbox" name="'. $this->unique .'[_restore]" />';
+              echo '<span class="button kfw-button-restore">'. esc_html__( 'Restore', 'kfw' ) .'</span>';
+              echo '<span class="button kfw-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'kfw' ), esc_html__( 'Cancel', 'kfw' ) ) .'</span>';
+              echo '</label>';
+              echo '</div>';
+
+            }
+
           echo '</div>';
+
+          echo ( $has_nav ) ? '<div class="kfw-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 
@@ -226,9 +295,7 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
     // save metabox
     public function save_meta_box( $post_id ) {
 
-      $nonce = 'kfw_metabox_nonce'. $this->unique;
-
-      if( ! isset( $_POST[$nonce] ) && ! wp_verify_nonce( $_POST[$nonce], 'kfw_metabox_nonce' ) ) {
+      if( ! wp_verify_nonce( kfw_get_var( 'kfw_metabox_nonce'. $this->unique ), 'kfw_metabox_nonce' ) ) {
         return $post_id;
       }
 
@@ -236,7 +303,102 @@ if( ! class_exists( 'KFW_Metabox' ) ) {
         return $post_id;
       }
 
-      update_post_meta( $post_id, $this->unique, wp_unslash( (array) $_POST[$this->unique] ) );
+      $errors  = array();
+      $request = kfw_get_var( $this->unique );
+
+      if( ! empty( $request ) ) {
+
+        // ignore _nonce
+        if( isset( $request['_nonce'] ) ) {
+          unset( $request['_nonce'] );
+        }
+
+        // sanitize and validate
+        $section_key = 1;
+        $meta_sections = wp_list_sort( $this->sections , 'priority_num' );
+        foreach( $meta_sections as $section ) {
+
+          if( ! empty( $section['fields'] ) ) {
+
+            foreach( $section['fields'] as $field ) {
+
+              if( ! empty( $field['id'] ) ) {
+
+                // sanitize
+                if( ! empty( $field['sanitize'] ) ) {
+
+                  $sanitize              = $field['sanitize'];
+                  $value_sanitize        = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
+                  $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
+
+                }
+
+                // validate
+                if( ! empty( $field['validate'] ) ) {
+
+                  $validate       = $field['validate'];
+                  $value_validate = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
+                  $has_validated  = call_user_func( $validate, $value_validate );
+
+                  if( ! empty( $has_validated ) ) {
+
+                    $errors['sections'][$section_key] = true;
+                    $errors['fields'][$field['id']] = $has_validated;
+                    $request[$field['id']] = $this->get_meta_value( $field );
+
+                  }
+
+                }
+
+                // auto sanitize
+                if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
+                  $request[$field['id']] = '';
+                }
+
+              }
+
+            }
+
+          }
+
+          $section_key++;
+        }
+
+      }
+
+      $request = apply_filters( "kfw_{$this->unique}_save", $request, $post_id, $this );
+
+      do_action( "kfw_{$this->unique}_save_before", $request, $post_id, $this );
+
+      if( empty( $request ) || ! empty( $request['_restore'] ) ) {
+
+        if( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $request as $key => $value ) {
+            delete_post_meta( $post_id, $key );
+          }
+        } else {
+          delete_post_meta( $post_id, $this->unique );
+        }
+
+      } else {
+
+        if( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $request as $key => $value ) {
+            update_post_meta( $post_id, $key, $value );
+          }
+        } else {
+          update_post_meta( $post_id, $this->unique, $request );
+        }
+
+        if( ! empty( $errors ) ) {
+          update_post_meta( $post_id, '_kfw_errors', $errors );
+        }
+
+      }
+
+      do_action( "kfw_{$this->unique}_saved", $request, $post_id, $this );
+
+      do_action( "kfw_{$this->unique}_save_after", $request, $post_id, $this );
 
     }
   }

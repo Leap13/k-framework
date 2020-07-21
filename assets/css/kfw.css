@@ -617,9 +617,6 @@
   position: relative;
   padding: 30px;
 }
-.kfw-field + .kfw-field:not(.hidden) {
-  border-top: 1px solid #eee;
-}
 .kfw-field p:first-child {
   margin-top: 0;
 }
@@ -803,6 +800,13 @@
   max-width: 100%;
   text-align: center;
 }
+.kfw-field-spacing .kfw--input{
+  margin-right: 15px;
+}
+.kfw-field-spacing .kfw--input input::placeholder{
+  font-style: italic;
+  font-size: 12px;
+}
 .kfw-field-border .kfw--label,
 .kfw-field-spacing .kfw--label,
 .kfw-field-dimensions .kfw--label {
@@ -879,6 +883,17 @@
 /**
  * 03. 07. Field: checkbox, radio
  */
+.widget .kfw-field-checkbox{
+  display: flex;
+  flex-direction: row-reverse;
+}
+.widget .kfw-field-checkbox .kfw-title{
+  margin: 0;
+  margin-left: 5px;
+}
+.widget .kfw-field-checkbox .kfw-title h4{
+  line-height: 1.5;
+}
 .kfw-field-checkbox ul,
 .kfw-field-radio ul {
   margin: 0;
@@ -1246,7 +1261,7 @@
 .kfw-field-icon .button {
   margin-right: 5px;
 }
-.kfw-field-icon .kfw-icon-preview i {
+.kfw-field-icon .kfw-icon-preview span {
   display: inline-block;
   font-size: 14px;
   width: 30px;
@@ -1305,14 +1320,19 @@
   transition: opacity .2s;
 }
 .kfw-field-image_select .kfw--active {
-  border-color: #222;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-}
-.kfw-field-image_select .kfw--active:before {
-  opacity: 1;
+  -webkit-box-shadow: 0 0 3px 1px rgba(195,195,195,.5);
+    box-shadow: 0 0 3px 1px rgba(195,195,195,.5);  
 }
 .kfw-field-image_select img {
   vertical-align: top;
+}
+.kfw-field-image_select .kfw--active img{
+    border: 1px solid #0085ba;
+    background-color: #0085ba;
+}
+.kfw-field-image_select img{
+    border: 1px solid #f1f1f1;
+    background-color: #ccc;
 }
 .kfw-field-image_select input {
   display: none;
@@ -1767,8 +1787,8 @@
   padding: 0;
   margin: 0;
   overflow: hidden;
-  border-radius: 4px;
-  background-color: #ed6f6f;
+  background-color: rgb(150, 150, 150);
+  border-radius: 14px;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -1779,7 +1799,7 @@
   width: 24px;
   height: 18px;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 11px;
   transition: all .1s;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
@@ -1802,11 +1822,11 @@
 }
 .kfw-field-switcher .kfw--off {
   padding-right: 0;
-  padding-left: 28px;
+  padding-left: 26px;
   opacity: 1;
 }
 .kfw-field-switcher .kfw--active {
-  background: #4fb845;
+ background: rgb(250, 181, 34);;
 }
 .kfw-field-switcher .kfw--active .kfw--on {
   opacity: 1;
@@ -2368,6 +2388,9 @@
 .kfw-widgets > .kfw-field .kfw-fieldset {
   margin-left: 0;
 }
+.kfw-fieldset .kfw--unit{
+  padding-left: 10px;
+}
 .kfw-widgets .kfw-field-text input {
   width: 100%;
 }
@@ -2498,7 +2521,9 @@
 .control-section .kfw-dependency-control.hidden {
   display: none !important;
 }
-
+.kfw-field .kfw-field-number .kfw--unit{
+  padding-left: 10px;
+}
 /**
  * 06. Taxonomy
  */
@@ -3493,7 +3518,7 @@
     display: none !important;
   }
 
-  .kfw-content {
+  .kemet-addons-options .kfw-content {
     margin-left: 0;
   }
 
@@ -3947,4 +3972,165 @@
 .chosen-rtl .chosen-search input[type="text"] {
   padding: 4px 5px 4px 20px;
   direction: rtl;
+}
+/***********************************/
+/******** Kemet Panel **************/
+.kfw-header-left:before {
+    font-family: 'KMTAncientOwl' !important;
+    content: "\e900";
+    color: #fab522;
+    padding: 10px;
+    font-size: 140px;
+    line-height: normal;
+    margin-right: 15px;
+    position: absolute;
+    top: 3px;
+    left: -24px;
+}
+.kfw-theme-light .kfw-nav-background {
+  display: none;
+}
+.kemet-addons-options .kfw-nav ul li {
+  display: inline-block;
+}
+.kemet-addons-options .kfw-nav {
+  float: none;
+  width: 100%;
+}
+.kemet-addons-options .kfw-content {
+  margin-left: 0px;
+}
+.kfw-theme-light .kfw-nav ul li .kfw-section-active,
+.kfw-theme-light .kfw-nav ul li a {
+  border: 0px;
+}
+.kfw-header {
+  overflow: hidden;
+}
+.kfw-theme-light .kfw-header-inner {
+  overflow: hidden;
+}
+.kfw-header-inner h1 {
+  margin-left: 30px;;
+}
+.kfw-options.kemet-addons-options {
+  margin: 100px;
+  margin-left: 80px;
+}
+.kemet-addons-options .kfw-field .kfw-fieldset {
+  margin-left: 45%;
+}
+.kemet-addons-options .kfw-field .kfw-title {
+  width: 40%;
+}
+.kemet-addons-options .kfw-header-inner {
+  padding: 40px;
+}
+.kemet-addons-options .kfw-nav-options .kfw-tab-depth-0 a {
+  font-size: 16px;
+  line-height: 1.8em;
+}
+.kfw-field-systeminfo table.widefat {
+  border: 0px;
+  box-shadow: none;
+}
+.kfw-field-systeminfo table.widefat tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+.kfw-field-systeminfo .widefat td:first-child {
+  width: 30%;
+}
+/* Kemet Plugins */
+.kmt-plugins-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.kmt-plugins-container h2{
+  font-size: 24px;
+  line-height: 24px;
+}
+.kmt-plugins-container .kmt-card{
+  width: 32%;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: max-content;
+}
+.kmt-plugins-container .kmt-card .button{
+  cursor: pointer;
+}
+.kmt-plugins-container .kmt-card .kmt-card-body{
+  border-top: 1px solid #ccc;
+  padding: 10px 20px;
+}
+.kmt-plugins-container .kmt-card .kmt-card-footer{
+  border-top: 1px solid #ccc;
+  padding: 10px 20px;
+}
+.kmt-plugins-container .kmt-card-header .card-img img{
+  max-width: 100%;
+  max-height: 200px;
+  display: block;
+  margin: auto;
+}
+.kmt-plugins-container .kmt-card .kmt-card-body .plugin-description{
+  color: #777;
+  font-size: 13px;
+}
+@media only screen and (max-width: 767px) {
+  .kmt-plugins-container .kmt-card{
+    width: 100%;
+  }
+  .kmt-plugins-container .kmt-card .kmt-card-body .plugin-description{
+    font-size: 10px;
+  }
+  .kmt-plugins-container h2{
+    font-size: 20px;
+  }
+}
+@media only screen and (min-width: 767px) and (max-width: 1200px) {
+  .kmt-plugins-container .kmt-card{
+    width: 100%;
+  }
+  .kmt-plugins-container .kmt-card .kmt-card-body .plugin-description{
+    font-size: 10px;
+  }
+  .kmt-plugins-container h2{
+    font-size: 20px;
+  }
+}
+.kmt-plugin .dashicons{
+  margin-top: 5px;
+-webkit-animation: rotating 2s linear infinite;
+-moz-animation: rotating 2s linear infinite;
+-ms-animation: rotating 2s linear infinite;
+-o-animation: rotating 2s linear infinite;
+animation: rotating 2s linear infinite;
+}
+@keyframes rotating { 
+from {
+  -ms-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+to {
+  -ms-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  transform: rotate(360deg);
+} 
+}
+#kemet_page_options .kfw-nav ul{
+  padding-bottom: 100px;
+}
+.kfw-nav .kfw-icon.dashicons{
+  font-size: 17px;
+  margin-right: 5px;
 }

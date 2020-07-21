@@ -219,7 +219,15 @@
         var $link = $('#kfw-tab-link-'+ slug);
 
         if( $link.length > 0 ) {
-
+          var resetOptions = $link.closest('.kfw-tab-depth-0').attr('data-reset');
+            $nav.parent().parent().parent('.kfw-container').find('.kfw-buttons').each(function(){
+              if(resetOptions == 'false'){
+                  $(this).hide();
+              }else{
+                  $(this).show();
+              }
+            });
+          
           $link.closest('.kfw-tab-depth-0').addClass('kfw-tab-active').siblings().removeClass('kfw-tab-active');
           $links.removeClass('kfw-section-active');
           $link.addClass('kfw-section-active');
@@ -820,6 +828,7 @@
             var $title  = $header.find('.kfw-cloneable-value');
 
             $first.on('keyup', function( event ) {
+              $panel.find('.kfw-cloneable-title-prefix').fadeOut();
               $title.text($first.val());
             });
 
@@ -1004,7 +1013,9 @@
 
           $modal.find('.kfw-modal-loading').show();
 
-          window.wp.ajax.post( 'kfw-get-icons', { nonce: $button.data('nonce') } ).done( function( response ) {
+          window.wp.ajax.post( 'kfw-get-icons', {
+            nonce: $button.data('nonce')
+          }).done( function( response ) {
 
             $modal.find('.kfw-modal-loading').hide();
 
@@ -1018,7 +1029,7 @@
 
               var icon = $(this).data('kfw-icon');
 
-              KFW.vars.$icon_target.find('i').removeAttr('class').addClass(icon);
+              KFW.vars.$icon_target.find('span.dashicons').removeAttr('class').addClass("dashicons "+icon);
               KFW.vars.$icon_target.find('input').val(icon).trigger('change');
               KFW.vars.$icon_target.find('.kfw-icon-preview').removeClass('hidden');
               KFW.vars.$icon_target.find('.kfw-icon-remove').removeClass('hidden');
@@ -1047,25 +1058,23 @@
             });
 
             $modal.on('click', '.kfw-modal-close, .kfw-modal-overlay', function() {
-
               $modal.hide();
-
             });
 
+          }).fail( function( response ) {
+            $modal.find('.kfw-modal-loading').hide();
+            $modal.find('.kfw-modal-load').html( response.error );
+            $modal.on('click', function() { $modal.hide(); });
           });
-
         }
 
       });
 
       $this.on('click', '.kfw-icon-remove', function( e ) {
-
         e.preventDefault();
-
         $this.find('.kfw-icon-preview').addClass('hidden');
         $this.find('input').val('').trigger('change');
         $(this).addClass('hidden');
-
       });
 
     });
