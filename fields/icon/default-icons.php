@@ -210,6 +210,8 @@ function kfw_get_default_icons() {
 		'dashicons-desktop',
 		'dashicons-tablet',
 		'dashicons-smartphone',
+		'dashicons-instagram',
+		'dashicons-youtube',
 		'dashicons-smiley' )
   ) );
 }

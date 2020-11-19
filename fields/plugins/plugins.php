@@ -86,7 +86,7 @@ if ( ! class_exists( 'KFW_Field_plugins' ) ) {
             </div>
             <div class="kmt-card-body">
                 <h2 class="card-title"><?php echo $plugin_name; ?></h2>
-                <p class="plugin-description"><?php esc_html_e( $plugin_description , 'kemet-addons' ); ?></p>
+                <p class="plugin-description"><?php esc_html_e( $plugin_description , 'kfw' ); ?></p>
             </div>
             <div class="kmt-card-footer">
                 <?php
@@ -95,18 +95,18 @@ if ( ! class_exists( 'KFW_Field_plugins' ) ) {
                 $deactivate_url = wp_nonce_url( 'plugins.php?action=deactivate&plugin=' . $plugin_path . '&plugin_status=all&paged=1&amp;s', 'deactivate-plugin_' . $plugin_path );
                 if ( $this->is_addons_installed( $plugin_path ) ) {
                     if ( is_plugin_active($plugin_path) ) {
-                        $button_label = __( 'Deactivate ', 'kemet-addons' );
+                        $button_label = __( 'Deactivate ', 'kfw' );
 					    $status = 'deactivate';
                         $button = '<a class="button button-primary kmt-plugin" data-status = '.$status.'  data-url-deactivate = '.$deactivate_url.' onclick="plugin_action(event)" >' . $button_label . '</a>';
                     }else{
-                        $button_label = __( 'Activate', 'kemet-addons' );
+                        $button_label = __( 'Activate', 'kfw' );
 					    $status = 'activate';
                         $button = '<a class="button button-primary kmt-plugin" data-status = '.$status.'  data-url-activate = '.$activate_url.' onclick="plugin_action(event)" >' . $button_label . '</a>';
                     }
                 } else {
                     if ( current_user_can( 'install_plugins' ) ) {
                         $status = 'install';
-                        $button_label = __( 'Install and Activate', 'kemet-addons' );
+                        $button_label = __( 'Install and Activate', 'kfw' );
                         $button = '<a class="button button-primary kmt-plugin" data-status = '.$status.' data-url-install = '.$install_url.'  data-url-activate = '.$activate_url.' onclick="plugin_action(event)" >' . $button_label . '</a>'; 
                     }
                 }

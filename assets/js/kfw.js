@@ -2923,7 +2923,26 @@
 
     }
   };
+  
+  //
+  // Nav Menu Options Framework
+  //
+  $.fn.kfw_nav_menu = function () {
+    return this.each(function () {
 
+      var $navmenu = $(this);
+
+      $navmenu.on('click', 'a.item-edit', function () {
+        $(this).closest('li.menu-item').find('.kfw-fields').kfw_reload_script();
+      });
+
+      $navmenu.on('sortstop', function (event, ui) {
+        ui.item.find('.kfw-fields').kfw_reload_script_retry();
+      });
+
+    });
+  };
+  
   //
   // Retry Plugins
   //
@@ -3036,6 +3055,7 @@
     $('.kfw-post-formats').kfw_post_formats();
     $('.kfw-onload').kfw_reload_script();
     $('.widget').kfw_widgets();
+    $('#menu-to-edit').kfw_nav_menu();
 
   });
 
