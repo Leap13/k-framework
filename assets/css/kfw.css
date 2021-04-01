@@ -167,6 +167,10 @@
   float: left;
   width: 225px;
 }
+.kfw-nav ul li a .kfw-icon {
+  font-size: 18px;
+  margin-right: 4px;
+}
 .kfw-nav ul {
   clear: left;
   margin: 0;
