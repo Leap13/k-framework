@@ -1,8 +1,6 @@
-<?php if (! defined('ABSPATH')) {
-    die;
-} // Cannot access directly.
-
+<?php
 /**
+ * Kemet Framework - WordPress Options Framework
  *
  * @package   Kemet Framework - WordPress Options Framework
  * @author    Leap13
@@ -18,7 +16,10 @@
  * Description: K Framework is a lightweight WordPress options framework developed to be used for Kemet WordPress Theme and addon plugins.
  * Text Domain: kfw
  * Domain Path: /languages
- *
  */
 
-require_once plugin_dir_path(__FILE__) .'classes/setup.class.php';
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+} // Cannot access directly.
+
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-kfw.php';

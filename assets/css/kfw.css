@@ -27,7 +27,7 @@
  *     03. 03. Field: background
  *     03. 04. Field: backup
  *     03. 05. Field: border, spacing, dimensions
- *     03. 06. Field: button_set
+ *     03. 06. Field: button-set
  *     03. 07. Field: checkbox, radio
  *     03. 08. Field: code_editor
  *     03. 09. Field: color
@@ -37,7 +37,7 @@
  *     03. 13. Field: gallery
  *     03. 14. Field: group
  *     03. 15. Field: icon
- *     03. 16. Field: image_select
+ *     03. 16. Field: image-select
  *     03. 17. Field: link_color
  *     03. 18. Field: media
  *     03. 19. Field: palette
@@ -844,12 +844,12 @@
 }
 
 /**
- * 03. 06. Field: button_set
+ * 03. 06. Field: button-set
  */
-.kfw-field-button_set .kfw--buttons {
+.kfw-field-button-set .kfw--buttons {
   display: inline-block;
 }
-.kfw-field-button_set .kfw--button {
+.kfw-field-button-set .kfw--button {
   position: relative;
   z-index: 1;
   float: left;
@@ -864,26 +864,26 @@
   -webkit-user-select: none;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
-.kfw-field-button_set .kfw--button:first-child {
+.kfw-field-button-set .kfw--button:first-child {
   border-radius: 4px 0 0 4px;
 }
-.kfw-field-button_set .kfw--button:last-child {
+.kfw-field-button-set .kfw--button:last-child {
   border-radius: 0 4px 4px 0;
 }
-.kfw-field-button_set .kfw--button:not(:first-child) {
+.kfw-field-button-set .kfw--button:not(:first-child) {
   margin-left: -1px;
 }
-.kfw-field-button_set .kfw--button:hover {
+.kfw-field-button-set .kfw--button:hover {
   background-color: #eee;
 }
-.kfw-field-button_set .kfw--active:hover,
-.kfw-field-button_set .kfw--active {
+.kfw-field-button-set .kfw--active:hover,
+.kfw-field-button-set .kfw--active {
   z-index: 2;
   color: #fff;
   border-color: #006799;
   background-color: #0085ba;
 }
-.kfw-field-button_set input {
+.kfw-field-button-set input {
   display: none;
 }
 
@@ -1294,9 +1294,9 @@
 }
 
 /**
- * 03. 16. Field: image_select
+ * 03. 16. Field: image-select
  */
-.kfw-field-image_select .kfw--image {
+.kfw-field-image-select .kfw--image {
   cursor: pointer;
   position: relative;
   display: inline-block;
@@ -1312,7 +1312,7 @@
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
 }
-.kfw-field-image_select .kfw--image:before {
+.kfw-field-image-select .kfw--image:before {
   position: absolute;
   top: 0;
   left: 0;
@@ -1328,22 +1328,22 @@
   background-color: #222;
   transition: opacity 0.2s;
 }
-.kfw-field-image_select .kfw--active {
+.kfw-field-image-select .kfw--active {
   -webkit-box-shadow: 0 0 3px 1px rgba(195, 195, 195, 0.5);
   box-shadow: 0 0 3px 1px rgba(195, 195, 195, 0.5);
 }
-.kfw-field-image_select img {
+.kfw-field-image-select img {
   vertical-align: top;
 }
-.kfw-field-image_select .kfw--active img {
+.kfw-field-image-select .kfw--active img {
   border: 1px solid #0085ba;
   background-color: #0085ba;
 }
-.kfw-field-image_select img {
+.kfw-field-image-select img {
   border: 1px solid #f1f1f1;
   background-color: #ccc;
 }
-.kfw-field-image_select input {
+.kfw-field-image-select input {
   display: none;
 }
 

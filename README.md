@@ -4,6 +4,19 @@ K Framework is a lightweight WordPress options framework developed to be used fo
 
 ## Available Fileds
 
+- Background
+- Button Set
 - Checkbox
-- Switcher
+- Color
+- Fieldset
+- Group
+- Icon
+- Image Select
+- Media
+- Number
 - Select
+- Group
+- Spacing
+- Switcher
+- Text
+- Textarea
