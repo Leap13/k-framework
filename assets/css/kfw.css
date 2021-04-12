@@ -27,7 +27,7 @@
  *     03. 03. Field: background
  *     03. 04. Field: backup
  *     03. 05. Field: border, spacing, dimensions
- *     03. 06. Field: button_set
+ *     03. 06. Field: button-set
  *     03. 07. Field: checkbox, radio
  *     03. 08. Field: code_editor
  *     03. 09. Field: color
@@ -37,7 +37,7 @@
  *     03. 13. Field: gallery
  *     03. 14. Field: group
  *     03. 15. Field: icon
- *     03. 16. Field: image_select
+ *     03. 16. Field: image-select
  *     03. 17. Field: link_color
  *     03. 18. Field: media
  *     03. 19. Field: palette
@@ -166,6 +166,10 @@
   z-index: 10;
   float: left;
   width: 225px;
+}
+.kfw-nav ul li a .kfw-icon {
+  font-size: 18px;
+  margin-right: 4px;
 }
 .kfw-nav ul {
   clear: left;
@@ -617,16 +621,14 @@
   position: relative;
   padding: 30px;
 }
-.kfw-field + .kfw-field:not(.hidden) {
-  border-top: 1px solid #eee;
-}
 .kfw-field p:first-child {
   margin-top: 0;
 }
 .kfw-field p:last-child {
   margin-bottom: 0;
 }
-.kfw-field:after, .kfw-field:before {
+.kfw-field:after,
+.kfw-field:before {
   content: " ";
   display: table;
 }
@@ -687,7 +689,9 @@
   -webkit-transition: border-color 0.15s;
   transition: border-color 0.15s;
 }
-.kfw-field-accordion .kfw-accordion-title:active, .kfw-field-accordion .kfw-accordion-title:hover, .kfw-field-accordion .kfw-accordion-title:focus {
+.kfw-field-accordion .kfw-accordion-title:active,
+.kfw-field-accordion .kfw-accordion-title:hover,
+.kfw-field-accordion .kfw-accordion-title:focus {
   border: 1px solid #bbb;
   background-color: #fafafa;
   outline: none;
@@ -803,6 +807,13 @@
   max-width: 100%;
   text-align: center;
 }
+.kfw-field-spacing .kfw--input {
+  margin-right: 15px;
+}
+.kfw-field-spacing .kfw--input input::placeholder {
+  font-style: italic;
+  font-size: 12px;
+}
 .kfw-field-border .kfw--label,
 .kfw-field-spacing .kfw--label,
 .kfw-field-dimensions .kfw--label {
@@ -833,12 +844,12 @@
 }
 
 /**
- * 03. 06. Field: button_set
+ * 03. 06. Field: button-set
  */
-.kfw-field-button_set .kfw--buttons {
+.kfw-field-button-set .kfw--buttons {
   display: inline-block;
 }
-.kfw-field-button_set .kfw--button {
+.kfw-field-button-set .kfw--button {
   position: relative;
   z-index: 1;
   float: left;
@@ -853,32 +864,43 @@
   -webkit-user-select: none;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
-.kfw-field-button_set .kfw--button:first-child {
+.kfw-field-button-set .kfw--button:first-child {
   border-radius: 4px 0 0 4px;
 }
-.kfw-field-button_set .kfw--button:last-child {
+.kfw-field-button-set .kfw--button:last-child {
   border-radius: 0 4px 4px 0;
 }
-.kfw-field-button_set .kfw--button:not(:first-child) {
+.kfw-field-button-set .kfw--button:not(:first-child) {
   margin-left: -1px;
 }
-.kfw-field-button_set .kfw--button:hover {
+.kfw-field-button-set .kfw--button:hover {
   background-color: #eee;
 }
-.kfw-field-button_set .kfw--active:hover,
-.kfw-field-button_set .kfw--active {
+.kfw-field-button-set .kfw--active:hover,
+.kfw-field-button-set .kfw--active {
   z-index: 2;
   color: #fff;
   border-color: #006799;
   background-color: #0085ba;
 }
-.kfw-field-button_set input {
+.kfw-field-button-set input {
   display: none;
 }
 
 /**
  * 03. 07. Field: checkbox, radio
  */
+.widget .kfw-field-checkbox {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.widget .kfw-field-checkbox .kfw-title {
+  margin: 0;
+  margin-left: 5px;
+}
+.widget .kfw-field-checkbox .kfw-title h4 {
+  line-height: 1.5;
+}
 .kfw-field-checkbox ul,
 .kfw-field-radio ul {
   margin: 0;
@@ -1026,10 +1048,10 @@
   float: right;
 }
 .kfw-datepicker-wrapper .ui-datepicker-prev:before {
-  content: '\f053';
+  content: "\f053";
 }
 .kfw-datepicker-wrapper .ui-datepicker-next:before {
-  content: '\f054';
+  content: "\f054";
 }
 .kfw-datepicker-wrapper .ui-datepicker-prev-hover,
 .kfw-datepicker-wrapper .ui-datepicker-next-hover {
@@ -1173,7 +1195,9 @@
   -webkit-transition: border-color 0.15s;
   transition: border-color 0.15s;
 }
-.kfw-field-group .kfw-cloneable-title:active, .kfw-field-group .kfw-cloneable-title:hover, .kfw-field-group .kfw-cloneable-title:focus {
+.kfw-field-group .kfw-cloneable-title:active,
+.kfw-field-group .kfw-cloneable-title:hover,
+.kfw-field-group .kfw-cloneable-title:focus {
   border: 1px solid #bbb;
   background: #fafafa;
   outline: none;
@@ -1246,7 +1270,7 @@
 .kfw-field-icon .button {
   margin-right: 5px;
 }
-.kfw-field-icon .kfw-icon-preview i {
+.kfw-field-icon .kfw-icon-preview span {
   display: inline-block;
   font-size: 14px;
   width: 30px;
@@ -1270,9 +1294,9 @@
 }
 
 /**
- * 03. 16. Field: image_select
+ * 03. 16. Field: image-select
  */
-.kfw-field-image_select .kfw--image {
+.kfw-field-image-select .kfw--image {
   cursor: pointer;
   position: relative;
   display: inline-block;
@@ -1288,7 +1312,7 @@
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
 }
-.kfw-field-image_select .kfw--image:before {
+.kfw-field-image-select .kfw--image:before {
   position: absolute;
   top: 0;
   left: 0;
@@ -1302,19 +1326,24 @@
   opacity: 0;
   color: #fff;
   background-color: #222;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
-.kfw-field-image_select .kfw--active {
-  border-color: #222;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+.kfw-field-image-select .kfw--active {
+  -webkit-box-shadow: 0 0 3px 1px rgba(195, 195, 195, 0.5);
+  box-shadow: 0 0 3px 1px rgba(195, 195, 195, 0.5);
 }
-.kfw-field-image_select .kfw--active:before {
-  opacity: 1;
-}
-.kfw-field-image_select img {
+.kfw-field-image-select img {
   vertical-align: top;
 }
-.kfw-field-image_select input {
+.kfw-field-image-select .kfw--active img {
+  border: 1px solid #0085ba;
+  background-color: #0085ba;
+}
+.kfw-field-image-select img {
+  border: 1px solid #f1f1f1;
+  background-color: #ccc;
+}
+.kfw-field-image-select input {
   display: none;
 }
 
@@ -1364,7 +1393,7 @@
   color: #fff;
   background-color: #dd3333;
   opacity: 0.8;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .kfw-field-media .kfw--preview .fa-times:hover {
   opacity: 1;
@@ -1385,7 +1414,7 @@
   margin-bottom: 10px;
   user-select: none;
   -webkit-user-select: none;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .kfw-field-palette .kfw--palette span {
   vertical-align: middle;
@@ -1410,7 +1439,7 @@
   opacity: 0;
   color: #fff;
   background-color: #222;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 .kfw-field-palette .kfw--active {
   border-color: #222;
@@ -1767,8 +1796,8 @@
   padding: 0;
   margin: 0;
   overflow: hidden;
-  border-radius: 4px;
-  background-color: #ed6f6f;
+  background-color: rgb(150, 150, 150);
+  border-radius: 14px;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -1779,8 +1808,8 @@
   width: 24px;
   height: 18px;
   background-color: #fff;
-  border-radius: 4px;
-  transition: all .1s;
+  border-radius: 11px;
+  transition: all 0.1s;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
 .kfw-field-switcher .kfw--on,
@@ -1798,15 +1827,15 @@
   color: #fff;
   padding-right: 28px;
   opacity: 0;
-  transition: all .1s;
+  transition: all 0.1s;
 }
 .kfw-field-switcher .kfw--off {
   padding-right: 0;
-  padding-left: 28px;
+  padding-left: 26px;
   opacity: 1;
 }
 .kfw-field-switcher .kfw--active {
-  background: #4fb845;
+  background: rgb(250, 181, 34);
 }
 .kfw-field-switcher .kfw--active .kfw--on {
   opacity: 1;
@@ -1959,7 +1988,7 @@
   border-radius: 2.5px;
   user-select: none;
   -webkit-user-select: none;
-  transition: background-color .2s, border-color .2s;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 .kfw-field-typography .kfw--block-preview {
   cursor: pointer;
@@ -2206,7 +2235,11 @@
 .kfw-field .chosen-container-single .chosen-single abbr:hover {
   color: #555;
 }
-.kfw-field .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+.kfw-field
+  .chosen-container-multi
+  .chosen-choices
+  li.search-choice
+  .search-choice-close {
   font-family: FontAwesome;
   font-size: 12px;
   height: 100%;
@@ -2215,10 +2248,18 @@
   text-align: center;
   background: none;
 }
-.kfw-field .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:before {
+.kfw-field
+  .chosen-container-multi
+  .chosen-choices
+  li.search-choice
+  .search-choice-close:before {
   content: "\f00d";
 }
-.kfw-field .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+.kfw-field
+  .chosen-container-multi
+  .chosen-choices
+  li.search-choice
+  .search-choice-close:hover {
   color: #555;
 }
 .kfw-field .chosen-container-single .chosen-single div b {
@@ -2233,7 +2274,11 @@
 .kfw-field .chosen-container-single .chosen-single div b:hover {
   color: #555;
 }
-.kfw-field .chosen-container-active.chosen-with-drop .chosen-single div b:before {
+.kfw-field
+  .chosen-container-active.chosen-with-drop
+  .chosen-single
+  div
+  b:before {
   content: "\f106";
 }
 .kfw-field .chosen-container-single .chosen-single-with-deselect span {
@@ -2332,7 +2377,7 @@
   user-select: none;
   -webkit-user-select: none;
   color: #999;
-  transition: background-color .2s, border-color .2s, color .2s;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 .kfw-field .kfw--transparent-active .wp-color-result {
   background-image: url(../images/checkerboard.png);
@@ -2367,6 +2412,9 @@
 }
 .kfw-widgets > .kfw-field .kfw-fieldset {
   margin-left: 0;
+}
+.kfw-fieldset .kfw--unit {
+  padding-left: 10px;
 }
 .kfw-widgets .kfw-field-text input {
   width: 100%;
@@ -2498,7 +2546,9 @@
 .control-section .kfw-dependency-control.hidden {
   display: none !important;
 }
-
+.kfw-field .kfw-field-number .kfw--unit {
+  padding-left: 10px;
+}
 /**
  * 06. Taxonomy
  */
@@ -2695,7 +2745,8 @@
 .kfw-modal-content .kfw-field {
   padding: 15px 30px 15px 15px;
 }
-.kfw-modal-content a:active, .kfw-modal-content a:focus {
+.kfw-modal-content a:active,
+.kfw-modal-content a:focus {
   outline: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
@@ -2840,7 +2891,8 @@
   padding: 14px;
   font-size: 13px;
   background-color: #f5f5f5;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .kfw-shortcode-block .button {
@@ -3103,10 +3155,13 @@
   -moz-box-shadow: 0 1px 0 #ba281e !important;
   -webkit-box-shadow: 0 1px 0 #ba281e !important;
   box-shadow: 0 1px 0 #ba281e !important;
-  text-shadow: 0 -1px 1px #ba281e, 1px 0 1px #ba281e, 0 1px 1px #ba281e, -1px 0 1px !important;
-  text-shadow: 0 -1px 1px #ba281e, 1px 0 1px #ba281e, 0 1px 1px #ba281e, -1px 0 1px #ba281e !important;
+  text-shadow: 0 -1px 1px #ba281e, 1px 0 1px #ba281e, 0 1px 1px #ba281e,
+    -1px 0 1px !important;
+  text-shadow: 0 -1px 1px #ba281e, 1px 0 1px #ba281e, 0 1px 1px #ba281e,
+    -1px 0 1px #ba281e !important;
 }
-.kfw-warning-primary:hover, .kfw-warning-primary:focus {
+.kfw-warning-primary:hover,
+.kfw-warning-primary:focus {
   border-color: #ba281e !important;
   background: #e35950 !important;
   -moz-box-shadow: 0 1px 0 #ba281e !important;
@@ -3434,7 +3489,8 @@
   color: #5cb85c;
   font-weight: bold;
 }
-.kfw--upgrade a:focus, .kfw--upgrade a:hover {
+.kfw--upgrade a:focus,
+.kfw--upgrade a:hover {
   color: #4aa14a;
   outline: none;
   box-shadow: none;
@@ -3491,10 +3547,6 @@
   .kfw-reset-section,
   .kfw-nav-background {
     display: none !important;
-  }
-
-  .kfw-content {
-    margin-left: 0;
   }
 
   .kfw-section-title,
@@ -3582,7 +3634,8 @@
   cursor: pointer;
 }
 
-.chosen-container .search-choice .group-name, .chosen-container .chosen-single .group-name {
+.chosen-container .search-choice .group-name,
+.chosen-container .chosen-single .group-name {
   margin-right: 4px;
   overflow: hidden;
   white-space: nowrap;
@@ -3591,7 +3644,8 @@
   color: #999999;
 }
 
-.chosen-container .search-choice .group-name:after, .chosen-container .chosen-single .group-name:after {
+.chosen-container .search-choice .group-name:after,
+.chosen-container .chosen-single .group-name:after {
   content: ":";
   padding-left: 2px;
   vertical-align: top;
@@ -3606,7 +3660,12 @@
   border: 1px solid #aaa;
   border-radius: 5px;
   background-color: #fff;
-  background: linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background: linear-gradient(
+    #ffffff 20%,
+    #f6f6f6 50%,
+    #eeeeee 52%,
+    #f4f4f4 100%
+  );
   background-clip: padding-box;
   box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
   color: #444;
@@ -3796,7 +3855,12 @@
   max-width: 100%;
   border-radius: 3px;
   background-color: #eeeeee;
-  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+  background-image: linear-gradient(
+    #f4f4f4 20%,
+    #f0f0f0 50%,
+    #e8e8e8 52%,
+    #eeeeee 100%
+  );
   background-size: 100% 19px;
   background-repeat: repeat-x;
   background-clip: padding-box;
@@ -3824,7 +3888,12 @@
   padding-right: 5px;
   border: 1px solid #ccc;
   background-color: #e4e4e4;
-  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+  background-image: linear-gradient(
+    #f4f4f4 20%,
+    #f0f0f0 50%,
+    #e8e8e8 52%,
+    #eeeeee 100%
+  );
   color: #666;
 }
 
@@ -3947,4 +4016,75 @@
 .chosen-rtl .chosen-search input[type="text"] {
   padding: 4px 5px 4px 20px;
   direction: rtl;
+}
+.kfw-theme-light .kfw-nav-background {
+  display: none;
+}
+.kfw-theme-light .kfw-nav ul li .kfw-section-active,
+.kfw-theme-light .kfw-nav ul li a {
+  border: 0px;
+}
+.kfw-header {
+  overflow: hidden;
+}
+.kfw-theme-light .kfw-header-inner {
+  overflow: hidden;
+}
+.kfw-header-inner h1 {
+  margin-left: 30px;
+}
+/**
+ * 08. Nav Menu
+ */
+.kfw-nav-menu-options {
+  clear: both;
+  float: left;
+  width: 100%;
+}
+.kfw-nav-menu-options > .kfw-fields {
+  margin-left: -10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.kfw-nav-menu-options > .kfw-fields > .kfw-field {
+  padding: 12px 14px 12px 12px;
+}
+.kfw-nav-menu-options > .kfw-fields > .kfw-field .kfw-title {
+  float: none;
+  width: 100%;
+  margin-bottom: 5px;
+}
+.kfw-nav-menu-options > .kfw-fields > .kfw-field .kfw-fieldset {
+  float: none;
+  width: 100%;
+}
+.kfw-nav-menu-options .kfw-field-text input {
+  width: 100%;
+}
+.kfw-nav-menu-options .kfw-field-notice .kfw-notice {
+  padding: 15px;
+}
+
+.kfw-nav-menu-title {
+  padding: 12px 14px 12px 12px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.kfw-nav-menu-title:first-child {
+  border-top: 0;
+}
+.kfw-nav-menu-title h4 {
+  margin: 0;
+  padding: 0;
+  color: #23282d;
+}
+
+.kfw-nav-menu-icon {
+  margin-right: 5px;
+}
+.kfw-nav-menu-options .kfw-field .kfw-fieldset {
+  margin-left: 0;
 }
