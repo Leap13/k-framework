@@ -21,20 +21,12 @@ if ( ! class_exists( 'KFW' ) ) {
 	 */
 	class KFW {
 
-
 		/**
 		 * Version
 		 *
 		 * @var string
 		 */
 		public static $version = '2.0.9';
-
-		/**
-		 * Premium
-		 *
-		 * @var boolean
-		 */
-		public static $premium = true;
 
 		/**
 		 * Dir
@@ -111,6 +103,20 @@ if ( ! class_exists( 'KFW' ) ) {
 		 */
 		public static function setup() {
 
+			// setup options.
+			$params = array();
+			if ( ! empty( self::$args['options'] ) ) {
+				foreach ( self::$args['options'] as $key => $value ) {
+					if ( ! empty( self::$args['sections'][ $key ] ) && ! isset( self::$inited[ $key ] ) ) {
+						$params['args']       = $value;
+						$params['sections']   = self::$args['sections'][ $key ];
+						self::$inited[ $key ] = true;
+
+						KFW_Options::instance( $key, $params );
+					}
+				}
+			}
+
 			// setup metaboxes.
 			$params = array();
 			if ( ! empty( self::$args['metaboxes'] ) ) {
@@ -140,6 +146,17 @@ if ( ! class_exists( 'KFW' ) ) {
 			}
 
 			do_action( 'kfw_loaded' );
+		}
+
+		/**
+		 * Create options
+		 *
+		 * @param string $id option id.
+		 * @param array  $args arguments.
+		 * @return void
+		 */
+		public static function create_options( $id, $args = array() ) {
+			self::$args['options'][ $id ] = $args;
 		}
 
 		/**
@@ -267,16 +284,15 @@ if ( ! class_exists( 'KFW' ) ) {
 		 * @return void
 		 */
 		public static function includes() {
+			// Functions.
 			self::include_plugin_file( 'functions/helpers.php' );
 			self::include_plugin_file( 'functions/actions.php' );
-			// includes free version classes.
+			// Classes.
 			self::include_plugin_file( 'classes/class-kfw-abstract.php' );
 			self::include_plugin_file( 'classes/class-kfw-fields.php' );
-			// includes premium version classes.
-			if ( self::$premium ) {
-				self::include_plugin_file( 'classes/class-kfw-metabox.php' );
-				self::include_plugin_file( 'classes/class-kfw-nav-menu-options.php' );
-			}
+			self::include_plugin_file( 'classes/class-kfw-metabox.php' );
+			self::include_plugin_file( 'classes/class-kfw-nav-menu-options.php' );
+			self::include_plugin_file( 'classes/class-kfw-options.php' );
 		}
 
 		/**
