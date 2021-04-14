@@ -2,7 +2,7 @@
 /**
  * Field: Button_Set
  *
- * @package Kemet Framework
+ * @package K Framework
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

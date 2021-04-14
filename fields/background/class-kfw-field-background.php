@@ -2,7 +2,7 @@
 /**
  * Field: background
  *
- * @package Kemet Framework
+ * @package K Framework
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -3,7 +3,7 @@
  * Default Icons
  * We are using Dashicons icons as default
  *
- * @package Kemet Framework
+ * @package K Framework
  */
 
 /**
