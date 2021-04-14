@@ -12,7 +12,7 @@
  * Plugin URI: https://leap13.com
  * Author: Leap13
  * Author URI: https://leap13.com
- * Version: 0.1.0
+ * Version: 1.0.0
  * Description: K Framework is a lightweight WordPress options framework developed to be used for K WordPress Theme and addon plugins.
  * Text Domain: kfw
  * Domain Path: /languages
